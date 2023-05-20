@@ -1,0 +1,62 @@
+登陆root 
+sudo su
+输入密码
+新建用户并创建home目录
+cd
+useradd -d /home/$name$ -g student -m $name$
+usermod -s /bin/bash $name$
+sudo passwd $name$
+输入两次自己的密码
+sudo chmod u+w /etc/sudoers
+sudo vi /etc/sudoers
+按键盘 i
+#在root下添加一行
+$name$ ALL=(ALL:ALL)ALL
+按ESC，冒号输入wq! Enter
+sudo chmod u-w /etc/sudoers
+退出root，登陆自己的用户
+su $name$
+cd ~
+cd ..
+sudo chmod 700 -R /home/zl
+cd ~
+加入ssh服务
+sudo vim /etc/passwd 
+看下该用户所在行末有没有/bin/bash，如果没有则在最后一行追加:/bin/bash
+类似这样： zl:x:1001:1001::/home/zl:/bin/bash
+
+查看/etc/ssh/sshd_config文件情况
+cat /etc/ssh/sshd_config
+发现没有新建的用户
+修改SSH配置：sudo vim /etc/ssh/sshd_config
+在最后添加：AllowUsers user_name
+service ssh restart #重启ssh
+自己电脑打开看能不能连上
+安装miniconda3
+cd ~
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+source ~/.bashrc
+输入conda -v
+若出现command not found ,继续，若出现版本即正常
+sudo gedit ~/.bashrc
+输入密码后，在打开的bashrc文件内加上这样一段：
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/$你的用户名$/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/$你的用户名$/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/$你的用户名$/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/$你的用户名$/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+注意上述的'/home/$你的用户名$/miniconda3/bin/conda'等路径要改称你自己的conda安装路径，
+加完以后再source ~/.bashrc,或者重开命令行就OK了（重开命令行就是source）
+查看服务器使用情况
+pip install gpustat
+watch -n 2 --color gpustat --c
