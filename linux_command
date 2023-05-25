@@ -1,9 +1,11 @@
 批量清理显卡中残留进程,会杀掉显示屏进程，不影响后续操作
-sudo fuser -v /dev/nvidia* |awk '{for(i=1;i<=NF;i++)print "kill -9 " $i;}' | sudo sh
+fuser -v /dev/nvidia* |awk '{for(i=1;i<=NF;i++)print "kill -9 " $i;}' | sudo sh
 找到隐藏的进程，top和ps -aux看不到的情况下
 fuser -v /dev/nvidia*
 查看当前目录下文件数量
 ls -l | grep "^-" | wc -l
+
+watch -n 2 --color gpustat --c
 
 ctrl+c和ctrl+z的区别：
 ctrl+c直接中断程序，ctrl+z是把程序放到后台执行
