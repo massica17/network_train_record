@@ -5,3 +5,9 @@ fuser -v /dev/nvidia*
 查看当前目录下文件数量
 ls -l | grep "^-" | wc -l
 
+ctrl+c和ctrl+z的区别：
+ctrl+c直接中断程序，ctrl+z是把程序放到后台执行
+jobs -l
+查看后台任务
+fg：将程序放到前台执行
+bg: 将程序放到后台执行
